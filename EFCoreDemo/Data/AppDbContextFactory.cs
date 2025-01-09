@@ -3,20 +3,20 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace EFCoreDemo.Data
 {
-    public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-    {
-        private readonly IConfiguration _configuration;
+    //public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    //{
+    //    private readonly IConfiguration _configuration;
 
-        public AppDbContext CreateDbContext(string[] args)
-        {
+    //    public AppDbContext CreateDbContext(string[] args)
+    //    {
 
-            var dbContextOption =new  DbContextOptionsBuilder<AppDbContext>();
-            dbContextOption.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+    //        var dbContextOption =new  DbContextOptionsBuilder<AppDbContext>();
+    //        dbContextOption.UseSqlite(_configuration.GetConnectionString("DefaultConnection"));
 
-            var dbContext = new AppDbContext(dbContextOption.Options);
+    //        var dbContext = new AppDbContext(dbContextOption.Options);
 
-            return dbContext;
+    //        return dbContext;
 
-        }
-    }
+    //    }
+    //}
 }
