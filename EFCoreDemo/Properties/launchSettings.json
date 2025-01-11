@@ -1,25 +1,28 @@
 ﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:60066",
-      "sslPort": 44308
+      "applicationUrl": "http://localhost:8064",
+      "sslPort": 44330
     }
   },
   "profiles": {
-    "EFCoreDemo": {
+    "sigtasDemo.api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7178;http://localhost:5240",
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7259;http://localhost:5001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
+      "launchBrowser": false,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
