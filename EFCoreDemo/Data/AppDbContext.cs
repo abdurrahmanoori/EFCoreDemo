@@ -23,9 +23,10 @@ namespace EFCoreDemo.Data
 
         public DbSet<ENT_BUS_ACT> ENT_BUS_ACT { get; set; }
 
-        
+        public DbSet<ENT_ACTIVITY> ENT_ACTIVITY { get; set; }
 
-        
+
+
     }
 
 
@@ -36,7 +37,7 @@ namespace EFCoreDemo.Data
 
         [Required]
         [MaxLength(255)]
-        public string TAX_PAYER_NAME { get; set; } 
+        public string? TAX_PAYER_NAME { get; set; } 
 
         public virtual ICollection<ENTERPRISE> ENTERPRISE { get; set; } /*= new List<ENTERPRISE>();*/
     }
@@ -48,7 +49,7 @@ namespace EFCoreDemo.Data
 
         [Required]
         [MaxLength(255)]
-        public string ENTERPRISE_NAME { get; set; } 
+        public string? ENTERPRISE_NAME { get; set; } 
 
         public long TAX_PAYER_NO { get; set; } 
         [ForeignKey(nameof(TAX_PAYER_NO))]
@@ -65,7 +66,7 @@ namespace EFCoreDemo.Data
 
         [Required]
         [StringLength(1)]
-        public string MAIN_ACTIVITY_FL { get; set; }
+        public string? MAIN_ACTIVITY_FL { get; set; }
 
         [ForeignKey(nameof(ENT_ACTIVITY_NO))]
         public ENT_ACTIVITY? ENT_ACTIVITY { get; set; }

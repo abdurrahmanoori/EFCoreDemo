@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreDemo", "EFCoreDemo\EFCoreDemo.csproj", "{563C5E32-512D-4035-B3DD-693B8D38B9D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreDemo", "EFCoreDemo\EFCoreDemo.csproj", "{563C5E32-512D-4035-B3DD-693B8D38B9D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sigtasDemo.api", "sigtasDemo.api\sigtasDemo.api.csproj", "{1893E881-3F88-42B6-9717-5C435C1E1DC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{563C5E32-512D-4035-B3DD-693B8D38B9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{563C5E32-512D-4035-B3DD-693B8D38B9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{563C5E32-512D-4035-B3DD-693B8D38B9D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1893E881-3F88-42B6-9717-5C435C1E1DC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1893E881-3F88-42B6-9717-5C435C1E1DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1893E881-3F88-42B6-9717-5C435C1E1DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1893E881-3F88-42B6-9717-5C435C1E1DC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
