@@ -2,6 +2,7 @@
 using EFCoreDemo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCoreDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250111071145_namingConvetionChaged")]
+    partial class namingConvetionChaged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -34,6 +36,7 @@ namespace EFCoreDemo.Migrations
             modelBuilder.Entity("EFCoreDemo.Data.Enterprise", b =>
                 {
                     b.Property<long>("EnterpriseId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("EnterpriseName")
@@ -74,6 +77,7 @@ namespace EFCoreDemo.Migrations
             modelBuilder.Entity("EFCoreDemo.Data.TaxPayer", b =>
                 {
                     b.Property<long>("TaxPayerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TaxPayerName")

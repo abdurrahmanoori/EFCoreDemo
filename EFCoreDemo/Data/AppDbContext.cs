@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EFCoreDemo.Data
 {
@@ -8,83 +8,123 @@ namespace EFCoreDemo.Data
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<ENT_BUS_ACT>().HasKey(x => new { x.ENTERPRISE_NO, x.ENT_ACTIVITY_NO });
+            builder.Entity<EnterpriseBusinessActivity>()
+                   .HasKey(x => new { x.EnterpriseId, x.ActivityId });
+
+            builder.Entity<TaxPayer>()
+                .Property(tp => tp.TaxPayerId)
+                .ValueGeneratedNever();
+
+            // Disable auto-increment for EnterpriseId in Enterprise
+            builder.Entity<Enterprise>()
+                .Property(e => e.EnterpriseId)
+                .ValueGeneratedNever();
+
+            // Disable auto-increment for ActivityId in Activity
+            builder.Entity<Activity>()
+                .Property(a => a.ActivityId)
+                .ValueGeneratedNever();
         }
 
-        public DbSet<TAX_PAYER> TAX_PAYER { get; set; }
-
-        public DbSet<ENTERPRISE> ENTERPRISE { get; set; }
-
-        public DbSet<ENT_BUS_ACT> ENT_BUS_ACT { get; set; }
-
-        public DbSet<ENT_ACTIVITY> ENT_ACTIVITY { get; set; }
-
-
-
+        public DbSet<TaxPayer> TaxPayers { get; set; }
+        public DbSet<Enterprise> Enterprises { get; set; }
+        public DbSet<EnterpriseBusinessActivity> EnterpriseBusinessActivities { get; set; }
+        public DbSet<Activity> Activities { get; set; }
     }
 
-
-    public partial class TAX_PAYER
+    public partial class TaxPayer
     {
         [Key]
-        public long TAX_PAYER_NO { get; set; } 
+        public long TaxPayerId { get; set; }
 
         [Required]
         [MaxLength(255)]
-        public string? TAX_PAYER_NAME { get; set; } 
+        public string? TaxPayerName { get; set; }
 
-        public virtual ICollection<ENTERPRISE> ENTERPRISE { get; set; } /*= new List<ENTERPRISE>();*/
+        public  ICollection<Enterprise>? Enterprises { get; set; }
     }
 
-    public partial class ENTERPRISE
+    public partial class Enterprise
     {
         [Key]
-        public long ENTERPRISE_NO { get; set; } 
+        public long EnterpriseId { get; set; }
 
         [Required]
         [MaxLength(255)]
-        public string? ENTERPRISE_NAME { get; set; } 
+        public string? EnterpriseName { get; set; }
 
-        public long TAX_PAYER_NO { get; set; } 
-        [ForeignKey(nameof(TAX_PAYER_NO))]
-        public virtual TAX_PAYER TAX_PAYER { get; set; }
+        public long TaxPayerId { get; set; }
 
-        public virtual ICollection<ENT_BUS_ACT> ENT_BUS_ACT { get; set; } /*= new List<BUSINESS_ACTIVITY>();*/
+        [ForeignKey(nameof(TaxPayerId))]
+        public  TaxPayer? TaxPayer { get; set; }
+
+        public  ICollection<EnterpriseBusinessActivity>? EnterpriseBusinessActivities { get; set; }
     }
 
-    public class ENT_BUS_ACT
+    public class EnterpriseBusinessActivity
     {
-        public byte ENT_ACTIVITY_NO { get; set; }
+        public byte ActivityId { get; set; }
 
-        public long ENTERPRISE_NO { get; set; }
+        public long EnterpriseId { get; set; }
 
         [Required]
         [StringLength(1)]
-        public string? MAIN_ACTIVITY_FL { get; set; }
+        public string? MainActivityFlag { get; set; }
 
-        [ForeignKey(nameof(ENT_ACTIVITY_NO))]
-        public ENT_ACTIVITY? ENT_ACTIVITY { get; set; }
+        [ForeignKey(nameof(ActivityId))]
+        public Activity? Activity { get; set; }
 
-        [ForeignKey(nameof(ENTERPRISE_NO))]
-        public ENTERPRISE? ENTERPRISE { get; set; }
+        [ForeignKey(nameof(EnterpriseId))]
+        public Enterprise? Enterprise { get; set; }
     }
 
-    public partial class ENT_ACTIVITY
+    public partial class Activity
     {
         [Key]
-        public byte ENT_ACTIVITY_NO { get; set; }
-
+        public byte ActivityId { get; set; }
+            
         [Required]
-        [StringLength(190)]
-        public string? ENT_ACTIVITY_DESC { get; set; }
+        [MaxLength(190)]
+        public string? ActivityDescription { get; set; }
 
-        public ICollection<ENT_BUS_ACT>? ENT_BUS_ACT { get; set; }
+        public ICollection<EnterpriseBusinessActivity>? EnterpriseBusinessActivities { get; set; }
+    }
+
+
+
+    public class TaxPayerDto
+    {
+        public long TaxPayerId { get; set; }
+        public string? TaxPayerName { get; set; }
+        public ICollection<EnterpriseDto>? Enterprises { get; set; }
+    }
+
+    public class EnterpriseDto
+    {
+        public long EnterpriseId { get; set; }
+        public string? EnterpriseName { get; set; }
+        public long TaxPayerId { get; set; }
+        public ICollection<EnterpriseBusinessActivityDto>? EnterpriseBusinessActivities { get; set; }
+    }
+
+    public class EnterpriseBusinessActivityDto
+    {
+        public byte ActivityId { get; set; }
+        public long EnterpriseId { get; set; }
+        public string? MainActivityFlag { get; set; }
+        //public ActivityDto? Activity { get; set; }
+        //public EnterpriseDto? Enterprise { get; set; }
+    }
+
+    public class ActivityDto
+    {
+        public byte ActivityId { get; set; }
+        public string? ActivityDescription { get; set; }
+        public ICollection<EnterpriseBusinessActivityDto>? EnterpriseBusinessActivities { get; set; }
     }
 
 }

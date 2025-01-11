@@ -1,6 +1,6 @@
 using EFCoreDemo.Data;
+using EFCoreDemo.Profile;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(configuration));
+builder.Services.AddAutoMapper(typeof(MappingProfile1));
 
 var app = builder.Build();
 

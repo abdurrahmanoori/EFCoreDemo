@@ -1,4 +1,5 @@
-﻿using EFCoreDemo.Data;
+﻿using AutoMapper;
+using EFCoreDemo.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,28 +10,30 @@ namespace EFCoreDemo.Controllers
     public class TaxPayerController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public TaxPayerController(AppDbContext context)
+        public TaxPayerController(AppDbContext context,IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
         // GET: api/TaxPayer
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TAX_PAYER>>> GetTaxPayers( )
+        public async Task<ActionResult<IEnumerable<TaxPayer>>> GetTaxPayers( )
         {
-            return await _context.TAX_PAYER
-                .Include(tp => tp.ENTERPRISE) // Include related enterprises
+            return await _context.TaxPayers
+                .Include(tp => tp.Enterprises) // Include related enterprises
                 .ToListAsync();
         }
 
         // GET: api/TaxPayer/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TAX_PAYER>> GetTaxPayer(long id)
+        public async Task<ActionResult<TaxPayer>> GetTaxPayer(long id)
         {
-            var taxPayer = await _context.TAX_PAYER
-                .Include(tp => tp.ENTERPRISE)
-                .FirstOrDefaultAsync(tp => tp.TAX_PAYER_NO == id);
+            var taxPayer = await _context.TaxPayers
+                .Include(tp => tp.Enterprises)
+                .FirstOrDefaultAsync(tp => tp.TaxPayerId == id);
 
             if (taxPayer == null)
             {
@@ -42,19 +45,25 @@ namespace EFCoreDemo.Controllers
 
         // POST: api/TaxPayer
         [HttpPost]
-        public async Task<ActionResult<TAX_PAYER>> CreateTaxPayer(TAX_PAYER taxPayer)
+        public async Task<ActionResult<TaxPayer>> CreateTaxPayer(TaxPayerDto taxPayerDto)
         {
-            _context.TAX_PAYER.Add(taxPayer);
+
+            //var taxPayerDto = _mapper.Map<TaxPayerDto>(taxPayerEntity); // Entity to DTO
+            var taxPayerEntity = _mapper.Map<TaxPayer>(taxPayerDto);   // DTO to Entity
+
+
+
+            _context.TaxPayers.Add(taxPayerEntity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTaxPayer), new { id = taxPayer.TAX_PAYER_NO }, taxPayer);
+            return CreatedAtAction(nameof(GetTaxPayer), new { id = taxPayerEntity.TaxPayerId },taxPayerDto);
         }
 
         // PUT: api/TaxPayer/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTaxPayer(long id, TAX_PAYER taxPayer)
+        public async Task<IActionResult> UpdateTaxPayer(long id, TaxPayer taxPayer)
         {
-            if (id != taxPayer.TAX_PAYER_NO)
+            if (id != taxPayer.TaxPayerId)
             {
                 return BadRequest();
             }
@@ -84,13 +93,13 @@ namespace EFCoreDemo.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTaxPayer(long id)
         {
-            var taxPayer = await _context.TAX_PAYER.FindAsync(id);
+            var taxPayer = await _context.TaxPayers.FindAsync(id);
             if (taxPayer == null)
             {
                 return NotFound();
             }
 
-            _context.TAX_PAYER.Remove(taxPayer);
+            _context.TaxPayers.Remove(taxPayer);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -98,7 +107,7 @@ namespace EFCoreDemo.Controllers
 
         private bool TaxPayerExists(long id)
         {
-            return _context.TAX_PAYER.Any(e => e.TAX_PAYER_NO == id);
+            return _context.TaxPayers.Any(e => e.TaxPayerId == id);
         }
     }
 }
