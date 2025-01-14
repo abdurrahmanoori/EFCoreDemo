@@ -28,12 +28,23 @@ namespace EFCoreDemo.Data
             builder.Entity<Activity>()
                 .Property(a => a.ActivityId)
                 .ValueGeneratedNever();
+
+            builder.Entity<collClass>()
+                .HasOne(x => x.EnterpriseBusinessActivity)
+                .WithMany(x => x.collClasses)
+                .HasForeignKey(x => new { x.EnterpriseId, x.ActivityId});
+
+            builder.Entity<collClass>()
+                .Property(x => x.Id)
+                .ValueGeneratedNever();
         }
 
         public DbSet<TaxPayer> TaxPayers { get; set; }
         public DbSet<Enterprise> Enterprises { get; set; }
         public DbSet<EnterpriseBusinessActivity> EnterpriseBusinessActivities { get; set; }
         public DbSet<Activity> Activities { get; set; }
+
+        public DbSet<collClass> collClasses { get; set; }
     }
 
     public partial class TaxPayer
@@ -45,7 +56,7 @@ namespace EFCoreDemo.Data
         [MaxLength(255)]
         public string? TaxPayerName { get; set; }
 
-        public  ICollection<Enterprise>? Enterprises { get; set; }
+        public ICollection<Enterprise>? Enterprises { get; set; }
     }
 
     public partial class Enterprise
@@ -60,9 +71,9 @@ namespace EFCoreDemo.Data
         public long TaxPayerId { get; set; }
 
         [ForeignKey(nameof(TaxPayerId))]
-        public  TaxPayer? TaxPayer { get; set; }
+        public TaxPayer? TaxPayer { get; set; }
 
-        public  ICollection<EnterpriseBusinessActivity>? EnterpriseBusinessActivities { get; set; }
+        public ICollection<EnterpriseBusinessActivity>? EnterpriseBusinessActivities { get; set; }
     }
 
     public class EnterpriseBusinessActivity
@@ -80,13 +91,32 @@ namespace EFCoreDemo.Data
 
         [ForeignKey(nameof(EnterpriseId))]
         public Enterprise? Enterprise { get; set; }
+
+        public virtual ICollection<collClass>? collClasses { get; set; }
+    }
+
+    public class collClass
+    {
+        public int Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public byte? ActivityId { get; set; }
+        public long? EnterpriseId { get; set; }
+
+        //[ForeignKey(nameof(ActivityId))]
+        public virtual EnterpriseBusinessActivity? EnterpriseBusinessActivity { get; set; }
+
+        //[ForeignKey(nameof(EnterpriseId))]
+        public virtual Enterprise? Enterprise { get; set; }
+
     }
 
     public partial class Activity
     {
         [Key]
         public byte ActivityId { get; set; }
-            
+
         [Required]
         [MaxLength(190)]
         public string? ActivityDescription { get; set; }
@@ -116,8 +146,21 @@ namespace EFCoreDemo.Data
         public byte ActivityId { get; set; }
         public long EnterpriseId { get; set; }
         public string? MainActivityFlag { get; set; }
+
+        public  ICollection<collClassDto>? collClasses { get; set; }
         //public ActivityDto? Activity { get; set; }
         //public EnterpriseDto? Enterprise { get; set; }
+    }
+
+    public class collClassDto
+    {
+        public int Id { get; set; }
+
+        public string? Name { get; set; }
+
+        public byte? ActivityId { get; set; }
+        public long? EnterpriseId { get; set; }
+
     }
 
     public class ActivityDto
