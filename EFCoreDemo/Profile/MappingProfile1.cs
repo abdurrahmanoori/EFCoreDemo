@@ -9,7 +9,7 @@ namespace EFCoreDemo.Profile
         {
             // TaxPayer Mapping
             CreateMap<TaxPayer, TaxPayerDto>()
-                .PreserveReferences()
+                
                 .ReverseMap();
 
             // Enterprise Mapping
@@ -17,21 +17,21 @@ namespace EFCoreDemo.Profile
                 .PreserveReferences()
                 .ReverseMap();
             
-           CreateMap<collClass, collClassDto>().PreserveReferences().ReverseMap();
+           //CreateMap<collClass, collClassDto>().PreserveReferences().ReverseMap();
 
             //CreateMap<List<Enterprise>,List<EnterpriseDto>>()
             //    .PreserveReferences()
             //    .ReverseMap();
 
             // EnterpriseBusinessActivity Mapping
-            CreateMap<EnterpriseBusinessActivity, EnterpriseBusinessActivityDto>()
-                .PreserveReferences()
-                .ReverseMap();
+            //CreateMap<EnterpriseBusinessActivity, EnterpriseBusinessActivityDto>()
+            //    .PreserveReferences()
+            //    .ReverseMap();
 
-            // Activity Mapping
-            CreateMap<Activity, ActivityDto>()
-                .PreserveReferences()
-                .ReverseMap();
+            //// Activity Mapping
+            //CreateMap<Activity, ActivityDto>()
+            //    .PreserveReferences()
+            //    .ReverseMap();
         }
     }
 

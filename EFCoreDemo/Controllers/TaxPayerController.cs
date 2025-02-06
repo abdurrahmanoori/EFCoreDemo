@@ -24,13 +24,14 @@ namespace EFCoreDemo.Controllers
         {
             var taxPayers = await _context.TaxPayers
                 .Include(tp => tp.Enterprises)
-                .ThenInclude(x => x.EnterpriseBusinessActivities)// Include related enterprises
+                //.ThenInclude(x => x.EnterpriseBusinessActivities)// Include related enterprises
                 .ToListAsync();
 
             var taxPayersDto = _mapper.Map<IEnumerable<TaxPayerDto>>(taxPayers);
 
             return Ok(taxPayersDto);
         }
+
 
         // GET: api/TaxPayer/5
         [HttpGet("{id}")]
@@ -51,6 +52,7 @@ namespace EFCoreDemo.Controllers
 
             return taxpayerDto;
         }
+
 
         // POST: api/TaxPayer
         [HttpPost]
@@ -112,38 +114,38 @@ namespace EFCoreDemo.Controllers
             return NoContent();
         }
 
-        private void ManualConvert(TaxPayerDto taxPayerDto, TaxPayer? taxPayer)
-        {
-            if (taxPayer == null) return;
+        //private void ManualConvert(TaxPayerDto taxPayerDto, TaxPayer? taxPayer)
+        //{
+        //    if (taxPayer == null) return;
 
-            // Map the main properties of TaxPayer
-            taxPayer.TaxPayerId = taxPayerDto.TaxPayerId;
-            taxPayer.TaxPayerName = taxPayerDto.TaxPayerName;
+        //    // Map the main properties of TaxPayer
+        //    taxPayer.TaxPayerId = taxPayerDto.TaxPayerId;
+        //    taxPayer.TaxPayerName = taxPayerDto.TaxPayerName;
 
-            // Check if Enterprises collection exists
-            if (taxPayerDto.Enterprises != null)
-            {
-                taxPayer.Enterprises = new List<Enterprise>();
+        //    // Check if Enterprises collection exists
+        //    if (taxPayerDto.Enterprises != null)
+        //    {
+        //        taxPayer.Enterprises = new List<Enterprise>();
 
-                foreach (var enterpriseDto in taxPayerDto.Enterprises)
-                {
-                    var enterprise = new Enterprise
-                    {
-                        EnterpriseId = enterpriseDto.EnterpriseId,
-                        EnterpriseName = enterpriseDto.EnterpriseName,
-                        TaxPayerId = enterpriseDto.TaxPayerId,
-                        EnterpriseBusinessActivities = enterpriseDto.EnterpriseBusinessActivities?.Select(ebaDto => new EnterpriseBusinessActivity
-                        {
-                            ActivityId = ebaDto.ActivityId,
-                            EnterpriseId = ebaDto.EnterpriseId,
-                            MainActivityFlag = ebaDto.MainActivityFlag
-                        }).ToList()
-                    };
+        //        foreach (var enterpriseDto in taxPayerDto.Enterprises)
+        //        {
+        //            var enterprise = new Enterprise
+        //            {
+        //                EnterpriseId = enterpriseDto.EnterpriseId,
+        //                EnterpriseName = enterpriseDto.EnterpriseName,
+        //                TaxPayerId = enterpriseDto.TaxPayerId,
+        //                EnterpriseBusinessActivities = enterpriseDto.EnterpriseBusinessActivities?.Select(ebaDto => new EnterpriseBusinessActivity
+        //                {
+        //                    ActivityId = ebaDto.ActivityId,
+        //                    EnterpriseId = ebaDto.EnterpriseId,
+        //                    MainActivityFlag = ebaDto.MainActivityFlag
+        //                }).ToList()
+        //            };
 
-                    taxPayer.Enterprises.Add(enterprise);
-                }
-            }
-        }
+        //            taxPayer.Enterprises.Add(enterprise);
+        //        }
+        //    }
+        //}
 
         private object GetChangeTracker(AppDbContext context)
         {

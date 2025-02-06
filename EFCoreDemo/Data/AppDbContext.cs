@@ -32,11 +32,29 @@ namespace EFCoreDemo.Data
             builder.Entity<collClass>()
                 .HasOne(x => x.EnterpriseBusinessActivity)
                 .WithMany(x => x.collClasses)
-                .HasForeignKey(x => new { x.EnterpriseId, x.ActivityId});
+                .HasForeignKey(x => new { x.EnterpriseId, x.ActivityId });
 
             builder.Entity<collClass>()
                 .Property(x => x.Id)
                 .ValueGeneratedNever();
+
+
+            builder.Entity<TaxPayer>()
+                .HasMany(x => x.Enterprises)
+                .WithOne(x => x.TaxPayer)
+                .HasForeignKey(x => x.TaxPayerId);
+
+            builder.Entity<Enterprise>()
+             .HasOne<TaxPayer>()
+             .WithOne(x => x.Enterprise)
+             .HasForeignKey<Enterprise>(x => x.EnterpriseId)
+             .HasPrincipalKey<TaxPayer>(x => x.TaxPayerId);
+            //.HasForeignKey(x => x.TaxPayerId);
+
+
+
+
+
         }
 
         public DbSet<TaxPayer> TaxPayers { get; set; }
@@ -57,6 +75,7 @@ namespace EFCoreDemo.Data
         public string? TaxPayerName { get; set; }
 
         public ICollection<Enterprise>? Enterprises { get; set; }
+        public Enterprise? Enterprise { get; set; }
     }
 
     public partial class Enterprise
@@ -130,7 +149,9 @@ namespace EFCoreDemo.Data
     {
         public long TaxPayerId { get; set; }
         public string? TaxPayerName { get; set; }
-        public ICollection<EnterpriseDto>? Enterprises { get; set; }
+        //public ICollection<EnterpriseDto>? Enterprises { get; set; }
+        public EnterpriseDto? Enterprise { get; set; }
+
     }
 
     public class EnterpriseDto
@@ -138,36 +159,36 @@ namespace EFCoreDemo.Data
         public long EnterpriseId { get; set; }
         public string? EnterpriseName { get; set; }
         public long TaxPayerId { get; set; }
-        public ICollection<EnterpriseBusinessActivityDto>? EnterpriseBusinessActivities { get; set; }
+        //public ICollection<EnterpriseBusinessActivityDto>? EnterpriseBusinessActivities { get; set; }
     }
 
-    public class EnterpriseBusinessActivityDto
-    {
-        public byte ActivityId { get; set; }
-        public long EnterpriseId { get; set; }
-        public string? MainActivityFlag { get; set; }
+    //public class EnterpriseBusinessActivityDto
+    //{
+    //    public byte ActivityId { get; set; }
+    //    public long EnterpriseId { get; set; }
+    //    public string? MainActivityFlag { get; set; }
 
-        public  ICollection<collClassDto>? collClasses { get; set; }
-        //public ActivityDto? Activity { get; set; }
-        //public EnterpriseDto? Enterprise { get; set; }
-    }
+    //    public  ICollection<collClassDto>? collClasses { get; set; }
+    //    //public ActivityDto? Activity { get; set; }
+    //    //public EnterpriseDto? Enterprise { get; set; }
+    //}
 
-    public class collClassDto
-    {
-        public int Id { get; set; }
+    //public class collClassDto
+    //{
+    //    public int Id { get; set; }
 
-        public string? Name { get; set; }
+    //    public string? Name { get; set; }
 
-        public byte? ActivityId { get; set; }
-        public long? EnterpriseId { get; set; }
+    //    public byte? ActivityId { get; set; }
+    //    public long? EnterpriseId { get; set; }
 
-    }
+    //}
 
-    public class ActivityDto
-    {
-        public byte ActivityId { get; set; }
-        public string? ActivityDescription { get; set; }
-        public ICollection<EnterpriseBusinessActivityDto>? EnterpriseBusinessActivities { get; set; }
-    }
+    //public class ActivityDto
+    //{
+    //    public byte ActivityId { get; set; }
+    //    public string? ActivityDescription { get; set; }
+    //    public ICollection<EnterpriseBusinessActivityDto>? EnterpriseBusinessActivities { get; set; }
+    //}
 
 }
