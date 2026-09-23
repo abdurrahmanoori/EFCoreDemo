@@ -15,12 +15,12 @@ class ApiClient {
 
   Map<String, String> get headers => {
     'Content-Type': 'application/json',
-    if (token != null) 'Authorization': 'Bearer ' + token!,
+    if (token != null) 'Authorization': 'Bearer ${token!}',
   };
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     final response = await _client.post(
-      Uri.parse(baseUrl + '/auth/login'),
+      Uri.parse('$baseUrl/auth/login'),
       headers: headers,
       body: jsonEncode({'username': username, 'password': password}),
     );
@@ -31,22 +31,27 @@ class ApiClient {
   }
 
   Future<Map<String, dynamic>> dashboard() => _getMap('/dashboard');
+
   Future<List<dynamic>> medicines([String search = '']) =>
-      _getList('/catalog/medicines?search=' + Uri.encodeQueryComponent(search));
+      _getList('/catalog/medicines?search=${Uri.encodeQueryComponent(search)}');
+
   Future<List<dynamic>> stock() => _getList('/inventory/stock');
+
   Future<List<dynamic>> expiring([int days = 90]) =>
-      _getList('/inventory/expiring?days=' + days.toString());
+      _getList('/inventory/expiring?days=$days');
+
   Future<List<dynamic>> prescriptions() => _getList('/prescriptions');
+
   Future<List<dynamic>> sales() => _getList('/sales');
 
   Future<Map<String, dynamic>> _getMap(String path) async {
-    final response = await _client.get(Uri.parse(baseUrl + path), headers: headers);
+    final response = await _client.get(Uri.parse('$baseUrl$path'), headers: headers);
     _ensureSuccess(response);
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
   Future<List<dynamic>> _getList(String path) async {
-    final response = await _client.get(Uri.parse(baseUrl + path), headers: headers);
+    final response = await _client.get(Uri.parse('$baseUrl$path'), headers: headers);
     _ensureSuccess(response);
     return jsonDecode(response.body) as List<dynamic>;
   }
@@ -60,8 +65,10 @@ class ApiClient {
 
 class ApiException implements Exception {
   ApiException(this.statusCode, this.body);
+
   final int statusCode;
   final String body;
+
   @override
-  String toString() => 'API ' + statusCode.toString() + ': ' + body;
+  String toString() => 'API $statusCode: $body';
 }
