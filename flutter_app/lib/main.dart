@@ -271,8 +271,8 @@ class _MedicinePageState extends State<MedicinePage> {
                 itemBuilder: (_, i) {
                   final m = snapshot.data![i] as Map<String, dynamic>;
                   return ListTile(
-                    title: Text((m['brandName'] ?? '').toString() + ' ' + (m['strength'] ?? '').toString()),
-                    subtitle: Text((m['genericName'] ?? '').toString() + ' • ' + (m['category'] ?? '').toString()),
+                    title: Text("${m['brandName'] ?? ''} ${m['strength'] ?? ''}"),
+                    subtitle: Text("${m['genericName'] ?? ''} • ${m['category'] ?? ''}"),
                     trailing: Text((m['sellingPrice'] ?? '').toString()),
                   );
                 },
@@ -306,7 +306,7 @@ class StockPage extends StatelessWidget {
               child: ListTile(
                 leading: Icon(available <= reorder ? Icons.warning_amber : Icons.inventory_2_outlined),
                 title: Text((x['brandName'] ?? '').toString()),
-                subtitle: Text('Available: ' + available.toString() + ' • Reorder: ' + reorder.toString()),
+                subtitle: Text('Available: $available • Reorder: $reorder'),
                 trailing: Text((x['nextExpiry'] ?? 'No batch').toString()),
               ),
             );
