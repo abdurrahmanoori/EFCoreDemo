@@ -15,8 +15,12 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Pharmacy Management API", Version = "v1" });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme { Name = "Authorization", Type = SecuritySchemeType.Http, Scheme = "bearer", BearerFormat = "JWT", In = ParameterLocation.Header });
 });
-var cs=builder.Configuration.GetConnectionString("DefaultConnection")??throw new InvalidOperationException("DefaultConnection is not configured.");
-builder.Services.AddDbContext<AppDbContext>(o=>o.UseSqlServer(cs));
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    var cs = builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("DefaultConnection is not configured.");
+    builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(cs));
+}
 var key=builder.Configuration["Jwt:Key"]??throw new InvalidOperationException("Jwt:Key is not configured.");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o=>o.TokenValidationParameters=new TokenValidationParameters
 {
