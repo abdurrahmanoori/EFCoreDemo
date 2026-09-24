@@ -1,0 +1,15 @@
+using EFCoreDemo.Domain.Enums;
+namespace EFCoreDemo.Contracts;
+public record LoginRequest(string Username,string Password);
+public record LoginResponse(string Token,DateTime ExpiresAtUtc,string FullName,UserRole Role);
+public record CreateUserRequest(string Username,string Password,string FullName,UserRole Role);
+public record MedicineRequest(string Code,string BrandName,string GenericName,string Strength,DosageForm DosageForm,int CategoryId,int UnitOfMeasureId,int? ManufacturerId,string? Barcode,decimal SellingPrice,int ReorderLevel,bool RequiresPrescription,bool IsControlled,string? StorageInstructions,string? Description);
+public record PrescriptionItemRequest(int MedicineId,string Dosage,string Frequency,string? Duration,int Quantity,string? Instructions);
+public record CreatePrescriptionRequest(int PatientId,int? DoctorId,DateOnly PrescriptionDate,DateOnly? ValidUntil,string? Diagnosis,string? Notes,List<PrescriptionItemRequest> Items);
+public record PurchaseItemRequest(int MedicineId,string BatchNumber,DateOnly? ManufactureDate,DateOnly ExpiryDate,int Quantity,decimal UnitCost,decimal SellingPrice);
+public record ReceivePurchaseRequest(int SupplierId,string InvoiceNumber,DateOnly PurchaseDate,string? Notes,List<PurchaseItemRequest> Items);
+public record SaleItemRequest(int MedicineId,int Quantity,decimal Discount=0);
+public record PaymentRequest(PaymentMethod Method,decimal Amount,string? ReferenceNumber);
+public record CreateSaleRequest(int? PatientId,int? PrescriptionId,decimal Discount,List<SaleItemRequest> Items,List<PaymentRequest> Payments);
+public record StockAdjustmentRequest(int MedicineBatchId,int QuantityChange,StockMovementType Type,string Reason);
+public record BatchAllocationResult(int MedicineBatchId,string BatchNumber,DateOnly ExpiryDate,int Quantity,decimal UnitPrice);

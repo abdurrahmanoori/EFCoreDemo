@@ -1,0 +1,43 @@
+name: Pharmacy CI
+
+on:
+  push:
+    branches: [ "feature/pharmacy-management-system" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Restore
+        run: dotnet restore tests/EFCoreDemo.Tests/EFCoreDemo.Tests.csproj
+      - name: Build
+        run: dotnet build tests/EFCoreDemo.Tests/EFCoreDemo.Tests.csproj --configuration Release --no-restore
+      - name: Test
+        run: dotnet test tests/EFCoreDemo.Tests/EFCoreDemo.Tests.csproj --configuration Release --no-build
+
+  flutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flutter_app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Packages
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: flutter test
